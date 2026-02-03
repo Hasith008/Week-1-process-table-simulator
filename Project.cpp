@@ -49,19 +49,74 @@ void BubbleSortByPriority()
 }
 void InsertionSortByPid()
 {
-	
+    int i, j;
+    Process key;
+    for (i = 1; i < count; i++) {
+        key = table[i];
+        j = i - 1;
+        while (j >= 0 && table[j].id > key.id) {
+            table[j + 1] = table[j];
+            j = j - 1;
+        }
+        table[j + 1] = key;
+    }
+    printf("\nTable sorted by PID using Insertion Sort.\n");
 }
-void ShellSortByPid()
+
+void ShellSortByBT()
 {
-	
+    for (int gap = count / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < count; i++) {
+            Process temp = table[i];
+            int j;
+            for (j = i; j >= gap && table[j - gap].BT > temp.BT; j -= gap) {
+                table[j] = table[j - gap];
+            }
+            table[j] = temp;
+        }
+    }
+    printf("\nTable sorted by BT using Shell Sort.\n");
 }
+
 void LinearSearchByPid()
 {
-	
+    int searchId, found = 0;
+    printf("Enter Pid to search: ");
+    scanf("%d", &searchId);
+
+    for (int i = 0; i < count; i++) {
+        if (table[i].id == searchId) {
+            printf("\nProcess Found at index %d:\nID: %d | Name: %s | BT: %.2f\n", 
+                    i, table[i].id, table[i].pName, table[i].BT);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) printf("\nProcess with ID %d not found.\n", searchId);
 }
+
 void BinarySearchByPid()
 {
-	
+    InsertionSortByPid(); 
+
+    int low = 0, high = count - 1, searchId;
+    printf("Enter Pid to search (Binary): ");
+    scanf("%d", &searchId);
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (table[mid].id == searchId) {
+            printf("\nProcess Found:\nID: %d | Name: %s | BT: %.2f\n", 
+                    table[mid].id, table[mid].pName, table[mid].BT);
+            return;
+        }
+        if (table[mid].id < searchId)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    printf("\nProcess not found.\n");
 }
 main()
 {
@@ -84,3 +139,4 @@ main()
 	}
 }
 }
+
